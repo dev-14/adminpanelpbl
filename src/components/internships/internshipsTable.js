@@ -1,13 +1,14 @@
 import React, { Component, useMemo } from 'react';
-import { useTable, useGlobalFilter, useFilters } from "react-table";
-import MOCK_DATA from "./MOCK_DATA_personalDetails.json";
-import { COLUMNS } from "./personalDetailsColumns";
-import './table.css'
-import { GlobalFilter } from "./GlobalFilter";
+import { useTable, useGlobalFilter, useFilters, useSortBy } from "react-table";
+import MOCK_DATA from "./MOCK_DATA_internship.json";
+import { COLUMNS } from "./internshipColumns";
+import '../table.css'
+import { GlobalFilter } from "../GlobalFilter";
+import { Sidebar } from '../Sidebar/SidebarComponent'
 // import { ColumnFilter } from './ColumnFilter';
 
 
-export class FilteringTable extends Component {
+export class InternshipsTable extends Component {
     render() {
         return(
             <Filtering />
@@ -41,14 +42,14 @@ export const Filtering = () => {
         //defaultColumn
     },
     useFilters,
-    useGlobalFilter)
+    useGlobalFilter,
+    useSortBy,)
 
     const { globalFilter } = state
 
     return (
         <div>
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-
         <table {...getTableProps()}>
             <thead>
                 {
@@ -56,9 +57,12 @@ export const Filtering = () => {
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             {
                                 headerGroup.headers.map((column) => (
-                                    <th {...column.getHeaderProps()}>
+                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                                         {column.render('Header')}
                                         {/* <div>{column.canFilter ? column.render('Filter') : null}</div> */}
+                                        <span>
+                                            {column.isSorted ? (column.isSortedDesc ? ' ^ ' : ' v ') : ''}
+                                        </span>
                                     </th>
                                 ))
                             }
